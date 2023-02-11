@@ -11,7 +11,7 @@ const getClientes = async(req, res) => {
 
     const [ clientes, total ] = await Promise.all([
         Cliente
-            .find({}, 'nombre apellido genero dni cumpleaños celular email img role')
+            .find({}, 'nombre apellido genero dni cumpleaños celular email img rol')
             .skip( desde ),
 
         Cliente.countDocuments()
@@ -92,30 +92,44 @@ const actualizarCliente = async (req, res = response) => {
 
     try {
 
-        const usuarioDB = await Usuario.findById( uid );
-        if ( !usuarioDB ) {
+        const clienteDB = await Cliente.findById( uid );
+        if ( !clienteDB ) {
             return res.status(404).json({
                 ok: false,
-                msg: 'No existe un usuario por ese id'
+                msg: 'No existe un cliente por ese id'
             });
         }
         // Actualizaciones
-        const { password, google, email, ...campos } = req.body;
-        if ( usuarioDB.email !== email ) {
-            const existeEmail = await Usuario.findOne({ email });
+        const { contraseña, email, dni, ...campos } = req.body;
+       //VALIDACION CORREO NO PUEDE SER IGUAL A UNO DE LA BD 
+        if ( clienteDB.email !== email ) {
+            const existeEmail = await Cliente.findOne({ email });
             if ( existeEmail ) {
                 return res.status(400).json({
                     ok: false,
-                    msg: 'Ya existe un usuario con ese email'
+                    msg: 'Ya existe un cliente con ese email'
                 });
             }
         }
+        //VALIDACION DNI NO PUEDE SER IGUAL A UNO DE LA BD 
+        if ( clienteDB.dni !== dni ) {
+            const existeDni = await Cliente.findOne({ dni });
+            if ( existeDni ) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Ya existe un cliente con ese dni'
+                });
+            }
+        }
+
         campos.email = email;
-        const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, { new: true } );
+        campos.dni = dni;
+
+        const clienteActualizado = await Cliente.findByIdAndUpdate( uid, campos, { new: true } );
 
         res.json({
             ok: true,
-            usuario: usuarioActualizado
+            usuario: clienteActualizado
         });
 
         

@@ -99,7 +99,9 @@ const actualizarUsuario = async (req, res = response) => {
             });
         }
         // Actualizaciones
-        const { password, google, email, ...campos } = req.body;
+        const { contraseña, dni, email, ...campos } = req.body;
+
+        //VALIDACION EMAIL NO PUEDE SER IGUAL A UNO DE LA BD 
         if ( usuarioDB.email !== email ) {
             const existeEmail = await Usuario.findOne({ email });
             if ( existeEmail ) {
@@ -109,6 +111,19 @@ const actualizarUsuario = async (req, res = response) => {
                 });
             }
         }
+
+        //VALIDACION DNI NO PUEDE SER IGUAL A UNO DE LA BD 
+        if ( usuarioDB.dni !== dni ) {
+            const existeDni = await Usuario.findOne({ dni });
+            if ( existeDni ) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Ya existe un usuario con ese dni'
+                });
+            }
+        }
+
+        campos.dni = dni;
         campos.email = email;
         const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, { new: true } );
 
