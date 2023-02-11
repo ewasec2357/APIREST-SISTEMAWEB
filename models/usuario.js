@@ -58,7 +58,9 @@ const UsuarioSchema = Schema({
         enum: ["1","0"],
         default:"1"
     },
-});
+}, 
+
+{  collection: 'hospitales' });
 
 
 UsuarioSchema.method('toJSON', function() {

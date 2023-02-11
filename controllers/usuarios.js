@@ -9,7 +9,7 @@ const getUsuarios = async(req, res) => {
 
     const desde = Number(req.query.desde) || 0;
 
-    const [ usuarios, total ] = await Promise.all([Usuario.find({}, 'nombre apellido genero dni cumpleaños celular email img')
+    const [ usuarios, total ] = await Promise.all([Usuario.find({}, 'nombre apellido genero dni cumpleaños celular email esmedico img')
             .populate('especialidad','nombre')
             .skip( desde ),
 
