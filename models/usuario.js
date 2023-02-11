@@ -58,9 +58,14 @@ const UsuarioSchema = Schema({
         enum: ["1","0"],
         default:"1"
     },
+    esmedico:{
+        type: Boolean,
+        required: true,
+        default: false
+    }
 }, 
 
-{  collection: 'hospitales' });
+{  collection: 'empleados' });
 
 
 UsuarioSchema.method('toJSON', function() {
