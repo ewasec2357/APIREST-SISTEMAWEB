@@ -42,10 +42,12 @@ const UsuarioSchema = Schema({
     },
     contraseña: {
         type: String,
-        required: true,
+        required: true
     },
     img: {
         type: String,
+        required: true,
+        default:"NO-IMG"
     },
     rol: {
         type: String,

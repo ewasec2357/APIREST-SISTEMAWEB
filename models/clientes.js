@@ -39,6 +39,8 @@ const ClienteSchema = Schema({
     },
     img: {
         type: String,
+        required: true,
+        default:"NO-IMG"
     },
     rol: {
         type: String,
