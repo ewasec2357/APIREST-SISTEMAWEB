@@ -16,7 +16,7 @@ const ClienteSchema = Schema({
         enum:["Masculino","Femenino","Otros"]
     },
     dni: {
-        type: Number,
+        type: String,
         unique:true,
         required: true
     },
