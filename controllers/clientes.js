@@ -150,21 +150,21 @@ const borrarCliente = async(req, res = response ) => {
 
     try {
 
-        const usuarioDB = await Usuario.findById( uid );
+        const clienteDB = await Cliente.findById( uid );
 
-        if ( !usuarioDB ) {
+        if ( !clienteDB ) {
             return res.status(404).json({
                 ok: false,
-                msg: 'No existe un usuario por ese id'
+                msg: 'No existe un cliente por ese id'
             });
         }
 
-        await Usuario.findByIdAndDelete( uid );
+        await Cliente.findByIdAndDelete( uid );
 
         
         res.json({
             ok: true,
-            msg: 'Usuario eliminado'
+            msg: 'Cliente eliminado'
         });
 
     } catch (error) {
