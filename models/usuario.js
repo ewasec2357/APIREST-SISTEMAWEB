@@ -27,7 +27,7 @@ const UsuarioSchema = Schema({
         required: true,
         ref: 'Especialidad' 
     },
-    cumpleaños: {
+    nacimiento: {
         type: Date,
         required: true
     },
@@ -40,7 +40,7 @@ const UsuarioSchema = Schema({
         required: true,
         unique: true
     },
-    contraseña: {
+    password: {
         type: String,
         required: true
     },

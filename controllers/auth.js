@@ -7,7 +7,7 @@ const { generarJWT } = require('../helpers/jwt');
 
 const login = async( req, res = response ) => {
 
-    const { email, contraseña } = req.body;
+    const { email, password } = req.body;
 
     try {
         
@@ -22,8 +22,8 @@ const login = async( req, res = response ) => {
         }
 
         // Verificar contraseña
-        const contraseñaValida = bcrypt.compareSync( contraseña, usuarioDB.contraseña );
-        if ( !contraseñaValida ) {
+        const passwordValido = bcrypt.compareSync( password, usuarioDB.password );
+        if ( !passwordValido ) {
             return res.status(400).json({
                 ok: false,
                 msg: 'Contraseña no válida'

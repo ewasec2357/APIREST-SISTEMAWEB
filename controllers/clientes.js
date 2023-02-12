@@ -11,7 +11,7 @@ const getClientes = async(req, res) => {
 
     const [ clientes, total ] = await Promise.all([
         Cliente
-            .find({}, 'nombre apellido genero dni cumpleaños celular email img rol')
+            .find({}, 'nombre apellido genero dni nacimiento celular email img rol')
             .skip( desde ),
 
         Cliente.countDocuments()
@@ -28,7 +28,7 @@ const getClientes = async(req, res) => {
 
 const crearCliente = async(req, res = response) => {
 
-    const { email, contraseña, dni } = req.body;
+    const { email, password, dni } = req.body;
 
     try {
 
@@ -54,7 +54,7 @@ const crearCliente = async(req, res = response) => {
     
         // Encriptar contraseña
         const salt = bcrypt.genSaltSync();
-        cliente.contraseña = bcrypt.hashSync( contraseña, salt );
+        cliente.password = bcrypt.hashSync( password, salt );
     
     
         // Guardar usuario
@@ -86,9 +86,7 @@ const crearCliente = async(req, res = response) => {
 const actualizarCliente = async (req, res = response) => {
 
     // TODO: Validar token y comprobar si es el usuario correcto
-
     const uid = req.params.id;
-
 
     try {
 
@@ -100,7 +98,7 @@ const actualizarCliente = async (req, res = response) => {
             });
         }
         // Actualizaciones
-        const { contraseña, email, dni, ...campos } = req.body;
+        const { password, email, dni, ...campos } = req.body;
        //VALIDACION CORREO NO PUEDE SER IGUAL A UNO DE LA BD 
         if ( clienteDB.email !== email ) {
             const existeEmail = await Cliente.findOne({ email });

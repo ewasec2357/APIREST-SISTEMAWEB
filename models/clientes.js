@@ -20,7 +20,7 @@ const ClienteSchema = Schema({
         unique:true,
         required: true
     },
-    cumpleaños: {
+    nacimiento: {
         type: Date,
         required: true
     },
@@ -33,7 +33,7 @@ const ClienteSchema = Schema({
         required: true,
         unique: true
     },
-    contraseña: {
+    password: {
         type: String,
         required: true,
     },

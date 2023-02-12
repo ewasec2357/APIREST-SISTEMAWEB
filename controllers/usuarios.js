@@ -9,7 +9,7 @@ const getUsuarios = async(req, res) => {
 
     const desde = Number(req.query.desde) || 0;
 
-    const [ usuarios, total ] = await Promise.all([Usuario.find({}, 'nombre apellido genero dni cumpleaños celular email esmedico img')
+    const [ usuarios, total ] = await Promise.all([Usuario.find({}, 'nombre apellido genero dni nacimiento celular email esmedico img')
             .populate('especialidad','nombre')
             .skip( desde ),
 
@@ -27,7 +27,7 @@ const getUsuarios = async(req, res) => {
 
 const crearUsuario = async(req, res = response) => {
 
-    const { email, contraseña, dni } = req.body;
+    const { email, password, dni } = req.body;
 
     try {
 
@@ -53,7 +53,7 @@ const crearUsuario = async(req, res = response) => {
     
         // Encriptar contraseña
         const salt = bcrypt.genSaltSync();
-        usuario.contraseña = bcrypt.hashSync( contraseña, salt );
+        usuario.password = bcrypt.hashSync( password, salt );
     
     
         // Guardar usuario
@@ -99,7 +99,7 @@ const actualizarUsuario = async (req, res = response) => {
             });
         }
         // Actualizaciones
-        const { contraseña, dni, email, ...campos } = req.body;
+        const { password, dni, email, ...campos } = req.body;
 
         //VALIDACION EMAIL NO PUEDE SER IGUAL A UNO DE LA BD 
         if ( usuarioDB.email !== email ) {
