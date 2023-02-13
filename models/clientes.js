@@ -21,7 +21,7 @@ const ClienteSchema = Schema({
         required: true
     },
     nacimiento: {
-        type: Date,
+        type: String,
         required: true
     },
     celular: {

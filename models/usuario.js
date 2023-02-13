@@ -28,7 +28,7 @@ const UsuarioSchema = Schema({
         ref: 'Especialidad' 
     },
     nacimiento: {
-        type: Date,
+        type: String,
         required: true
     },
     celular: {
