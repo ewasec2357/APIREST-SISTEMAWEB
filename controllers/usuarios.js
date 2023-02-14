@@ -123,8 +123,11 @@ const actualizarUsuario = async (req, res = response) => {
             }
         }
 
+        campos.password = password;
         campos.dni = dni;
         campos.email = email;
+
+        
         const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, { new: true } );
 
         res.json({
