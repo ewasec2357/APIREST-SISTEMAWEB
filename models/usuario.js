@@ -24,7 +24,6 @@ const UsuarioSchema = Schema({
         type: Array,
         items:{type:Schema.Types.ObjectId,
                uniqueItems:true},
-        required: true,
         ref: 'Especialidad' 
     },
     nacimiento: {
