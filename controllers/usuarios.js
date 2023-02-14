@@ -127,12 +127,10 @@ const actualizarUsuario = async (req, res = response) => {
         campos.dni = dni;
         campos.email = email;
 
-        const usuario = new Usuario( req.body );
+        const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, { new: true } );
         
         const salt = bcrypt.genSaltSync();
-        usuario.password = bcrypt.hashSync( password, salt );
-
-        const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, { new: true } );
+        usuarioActualizado.password = bcrypt.hashSync( password, salt );
 
         res.json({
             ok: true,
