@@ -119,7 +119,8 @@ const actualizarCliente = async (req, res = response) => {
                 });
             }
         }
-
+        
+        campos.password = password ? bcrypt.hashSync(password, bcrypt.genSaltSync()) : campos.password;
         campos.email = email;
         campos.dni = dni;
 
