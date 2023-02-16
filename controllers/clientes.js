@@ -82,7 +82,6 @@ const crearCliente = async(req, res = response) => {
 
 }
 
-
 const actualizarCliente = async (req, res = response) => {
 
     // TODO: Validar token y comprobar si es el usuario correcto
@@ -141,7 +140,6 @@ const actualizarCliente = async (req, res = response) => {
     }
 
 }
-
 
 const borrarCliente = async(req, res = response ) => {
 

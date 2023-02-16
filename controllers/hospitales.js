@@ -17,10 +17,7 @@ const getHospitales = async(req, res = response) => {
 const crearHospital = async(req, res = response) => {
 
     const uid = req.uid;
-    const hospital = new Hospital({ 
-        usuario: uid,
-        ...req.body 
-    });
+    const hospital = new Hospital({ usuario: uid,...req.body });
 
     try {
         

@@ -1,6 +1,6 @@
 /*
-    Hospitales
-    ruta: '/api/hospitales'
+    Especialidades
+    ruta: '/api/especialidades'
 */
 const { Router } = require('express');
 const { check } = require('express-validator');
@@ -18,7 +18,7 @@ const {
 
 const router = Router();
 
-router.get( '/', getEspecialidad );
+router.get( '/', validarJWT, getEspecialidad );
 
 router.post( '/',
     [
@@ -31,15 +31,14 @@ router.post( '/',
 
 router.put( '/:id',
     [
-        validarJWT,
-        validarCampos
+        validarJWT
     ],
     actualizarEspecialidad
 );
 
 router.delete( '/:id',
     [
-        validarJWT,
+        validarJWT
     ],
     borrarEspecialidad
 );

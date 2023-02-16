@@ -50,7 +50,21 @@ const login = async( req, res = response ) => {
 
 }
 
+const renovarToken = async(req,res = response) =>{
+    
+    const uid = req.uid;
+
+    const token_nuevo = await generarJWT( uid );
+
+    res.json({
+        ok: true,
+        token_nuevo
+    })
+
+
+}
 
 module.exports = {
-    login
+    login,
+    renovarToken
 }
