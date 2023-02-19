@@ -26,7 +26,7 @@ const ProductosSchema = Schema({
         default:"1"
     },
     fechacreacion:{
-        type: Date.now().toString(),
+        type: String,
         required: true
     }
 }, {  collection: 'productos' });
