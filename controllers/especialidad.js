@@ -1,8 +1,6 @@
 const { response } = require('express');
 const Especialidad = require('../models/especialidad');
 
-//const Especialidad = require('../models/especialidad');
-
 
 const getEspecialidad = async(req, res = response) => {
 
@@ -24,18 +22,6 @@ const getEspecialidad = async(req, res = response) => {
 
 const crearEspecialidad = async(req, res = response) => {
 
-   /* const {name} = req.body;
-
-    
-
-        const especialidadexiste = await Especialidad.findOne({ name });
-
-        if ( especialidadexiste ) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'La especialidad ya está registrada'
-            });
-        }; */
         try {
     const especialidad = new Especialidad( req.body );
 
@@ -58,7 +44,6 @@ const crearEspecialidad = async(req, res = response) => {
 const actualizarEspecialidad = async (req, res = response) => {
     
     const uid = req.params.id;
-
 
     try {
 
@@ -131,8 +116,6 @@ const borrarEspecialidad = async (req, res = response) => {
 
     }
 }
-
-
 
 module.exports = {
     getEspecialidad,

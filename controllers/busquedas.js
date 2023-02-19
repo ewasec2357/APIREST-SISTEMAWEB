@@ -60,7 +60,6 @@ const getDocumentosColeccion = async(req, res = response ) => {
 
 }
 
-
 module.exports = {
     getTodo,
     getDocumentosColeccion

@@ -31,7 +31,9 @@ router.post( '/',
 
 router.put( '/:id',
     [
-        validarJWT
+        validarJWT,
+        check('nombre','El nombre de la especialidad es necesario').not().isEmpty(),
+        validarCampos
     ],
     actualizarEspecialidad
 );

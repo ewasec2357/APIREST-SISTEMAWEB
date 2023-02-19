@@ -1,6 +1,5 @@
 const { response } = require('express');
 const bcrypt = require('bcryptjs');
-
 const Usuario = require('../models/usuario');
 const { generarJWT } = require('../helpers/jwt');
 
@@ -81,7 +80,6 @@ const crearUsuario = async(req, res = response) => {
 
 }
 
-
 const actualizarUsuario = async (req, res = response) => {
 
     // TODO: Validar token y comprobar si es el usuario correcto
@@ -127,7 +125,8 @@ const actualizarUsuario = async (req, res = response) => {
         campos.dni = dni;
         campos.email = email;
 
-        const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, { new: true } );
+        const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, { new: true } )
+                                                .populate('especialidad','nombre');
 
         res.json({
             ok: true,
@@ -144,7 +143,6 @@ const actualizarUsuario = async (req, res = response) => {
     }
 
 }
-
 
 const borrarUsuario = async(req, res = response ) => {
 
@@ -181,8 +179,6 @@ const borrarUsuario = async(req, res = response ) => {
 
 
 }
-
-
 
 module.exports = {
     getUsuarios,

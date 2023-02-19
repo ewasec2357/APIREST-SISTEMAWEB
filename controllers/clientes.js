@@ -177,8 +177,6 @@ const borrarCliente = async(req, res = response ) => {
 
 }
 
-
-
 module.exports = {
     getClientes,
     crearCliente,

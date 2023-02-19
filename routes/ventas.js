@@ -1,6 +1,6 @@
 /*
-    Citas
-    ruta: '/api/citas'
+    Canjes
+    ruta: '/api/Canjes'
 */
 const { Router } = require('express');
 const { check } = require('express-validator');
@@ -9,27 +9,28 @@ const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
 const {
-    getCitas,
-    crearCitas,
-    actualizarCita,
-    borrarCita
-} = require('../controllers/citas')
+    getCanjes,
+    crearCanjes,
+    actualizarCanjes,
+    borrarCanjes
+} = require('../controllers/canjes')
 
 
 const router = Router();
 
-router.get( '/', validarJWT, getCitas );
+router.get( '/', validarJWT, getCanjes );
 
 router.post( '/',
     [
         check('cliente', 'El cliente es obligatorio').not().isEmpty(),
-        check('especialidad', 'La especialidad es obligatoria').not().isEmpty(),
-        check('doctor', 'El doctor es obligatorio').not().isEmpty(),
+        check('fechadecanje', 'La fechadecanje es obligatoria').not().isEmpty(),
+        check('sesiones','El número de sesiones es obligatoria').not().isEmpty(),
+        check('descripcion', 'La descripcion es obligatoria').not().isEmpty(),
         check('horario', 'El horario es obligatorio').not().isEmpty(),
         validarCampos,
         validarJWT,
     ], 
-    crearCitas 
+    crearCanjes 
 );
 
 router.put( '/:id',
@@ -38,13 +39,16 @@ router.put( '/:id',
         validarCampos,
         validarJWT,
     ],
-    actualizarCita
+    actualizarCanjes
 );
 
 router.delete( '/:id',
-    validarJWT,
-    borrarCita
+    [
+        validarJWT,
+    ],
+    borrarCanjes
 );
+
 
 
 module.exports = router;

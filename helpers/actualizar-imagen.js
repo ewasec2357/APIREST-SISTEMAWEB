@@ -1,6 +1,5 @@
 const Usuario = require('../models/usuario');
 const fs = require('fs');
-
 const Cliente = require('../models/clientes');
 
 const borrarImagen = ( path ) => {
@@ -9,7 +8,6 @@ const borrarImagen = ( path ) => {
         fs.unlinkSync( path );
     }
 }
-
 
 const actualizarImagen = async(tipo, id, nombreArchivo) => {
 
@@ -27,9 +25,9 @@ const actualizarImagen = async(tipo, id, nombreArchivo) => {
             borrarImagen( pathViejo );
 
             cliente.img = nombreArchivo;
-            await cliente.save();
+            await cliente.sa
+            ve();
             return true;
-
         break;       
       
         case 'usuarios':
@@ -46,14 +44,9 @@ const actualizarImagen = async(tipo, id, nombreArchivo) => {
             usuario.img = nombreArchivo;
             await usuario.save();
             return true;
-
         break;
     }
-
-
 }
-
-
 
 module.exports = { 
     actualizarImagen

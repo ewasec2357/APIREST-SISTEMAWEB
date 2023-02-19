@@ -1,6 +1,5 @@
 const path = require('path');
 const fs = require('fs');
-
 const { response } = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { actualizarImagen } = require('../helpers/actualizar-imagen');
@@ -71,7 +70,6 @@ const fileUpload = ( req, res = response ) => {
 
 }
 
-
 const retornaImagen = ( req, res = response ) => {
 
     const tipo = req.params.tipo;
@@ -88,7 +86,6 @@ const retornaImagen = ( req, res = response ) => {
     }
 
 }
-
 
 module.exports = {
     fileUpload,
