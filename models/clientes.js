@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const UsuarioSchema = Schema({
+const ClienteSchema = Schema({
 
     nombre: {
         type: String,
@@ -20,11 +20,6 @@ const UsuarioSchema = Schema({
         unique:true,
         required: true
     },
-    especialidad: {
-        type: Array,
-        items:[Schema.Types.ObjectId],
-        ref: 'Especialidad'
-    },
     nacimiento: {
         type: String,
         required: true
@@ -40,7 +35,7 @@ const UsuarioSchema = Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
     img: {
         type: String,
@@ -50,7 +45,7 @@ const UsuarioSchema = Schema({
     rol: {
         type: String,
         required: true,
-        default: 'USUARIO_ROL'
+        default: "CLIENTE_ROL"
     },
     estado: {
         type: String,
@@ -58,17 +53,10 @@ const UsuarioSchema = Schema({
         enum: ["1","0"],
         default:"1"
     },
-    esmedico:{
-        type: Boolean,
-        required: true,
-        default: false
-    }
-}, 
-
-{  collection: 'empleados' });
+});
 
 
-UsuarioSchema.method('toJSON', function() {
+ClienteSchema.method('toJSON', function() {
     const { __v, _id, password, ...object } = this.toObject();
     object.uid = _id;
     return object;
@@ -76,4 +64,4 @@ UsuarioSchema.method('toJSON', function() {
 
 
 
-module.exports = model( 'Usuario', UsuarioSchema );
+module.exports = model( 'Cliente', ClienteSchema );

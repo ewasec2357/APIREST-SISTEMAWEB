@@ -12,8 +12,8 @@ const router = Router();
 
 router.post( '/',
     [
-        check('nom_usuario', 'El usuario es obligatorio').not().isEmpty(),
-        check('password', 'La contraseña es obligatorio').not().isEmpty(),
+        check('email', 'El email es obligatorio').isEmail(),
+        check('password', 'El password es obligatorio').not().isEmpty(),
         validarCampos
     ],
     login

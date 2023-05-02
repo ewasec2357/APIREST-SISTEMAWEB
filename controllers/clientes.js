@@ -1,38 +1,38 @@
 const { response } = require('express');
 const bcrypt = require('bcryptjs');
-const Usuario = require('../models/usuario');
+
+const Cliente = require('../models/clientes');
 const { generarJWT } = require('../helpers/jwt');
 
 
-const getUsuarios = async(req, res) => {
+const getClientes = async(req, res) => {
 
     const desde = Number(req.query.desde) || 0;
 
-    const [ usuarios, total ] = await Promise.all([Usuario.find({}, 'nombre apellido especialidad genero dni nacimiento celular email esmedico img')
-            //.populate('especialidad','nombre')
+    const [ clientes, total ] = await Promise.all([
+        Cliente
+            .find({}, 'nombre apellido genero dni nacimiento celular email img rol')
             .skip( desde ),
 
-        Usuario.countDocuments()
+        Cliente.countDocuments()
     ]);
 
 
     res.json({
         ok: true,
-        usuarios,
+        clientes,
         total
     });
 
 }
 
-const crearUsuario = async(req, res = response) => {
+const crearCliente = async(req, res = response) => {
 
     const { email, password, dni } = req.body;
 
     try {
 
-//        const especialidadid = String(req.query.id)
-
-        const existeEmail = await Usuario.findOne({ email });
+        const existeEmail = await Cliente.findOne({ email });
 
         if ( existeEmail ) {
             return res.status(400).json({
@@ -41,7 +41,7 @@ const crearUsuario = async(req, res = response) => {
             });
         }
 
-        const existedni = await Usuario.findOne({ dni });
+        const existedni = await Cliente.findOne({ dni });
 
         if ( existedni ) {
             return res.status(400).json({
@@ -50,23 +50,23 @@ const crearUsuario = async(req, res = response) => {
             });
         }
 
-        const usuario = new Usuario( req.body );
+        const cliente = new Cliente( req.body );
     
         // Encriptar contraseña
         const salt = bcrypt.genSaltSync();
-        usuario.password = bcrypt.hashSync( password, salt );
+        cliente.password = bcrypt.hashSync( password, salt );
     
     
         // Guardar usuario
-        await usuario.save();
+        await cliente.save();
 
         // Generar el TOKEN - JWT
-        const token = await generarJWT( usuario.id );
+        const token = await generarJWT( cliente.id );
 
 
         res.json({
             ok: true,
-            usuario,
+            cliente,
             token
         });
 
@@ -82,56 +82,52 @@ const crearUsuario = async(req, res = response) => {
 
 }
 
-const actualizarUsuario = async (req, res = response) => {
+const actualizarCliente = async (req, res = response) => {
 
     // TODO: Validar token y comprobar si es el usuario correcto
-
     const uid = req.params.id;
-
 
     try {
 
-        const usuarioDB = await Usuario.findById( uid );
-        if ( !usuarioDB ) {
+        const clienteDB = await Cliente.findById( uid );
+        if ( !clienteDB ) {
             return res.status(404).json({
                 ok: false,
-                msg: 'No existe un usuario por ese id'
+                msg: 'No existe un cliente por ese id'
             });
         }
         // Actualizaciones
-        const { password, dni, email, ...campos } = req.body;
-
-        //VALIDACION EMAIL NO PUEDE SER IGUAL A UNO DE LA BD 
-        if ( usuarioDB.email !== email ) {
-            const existeEmail = await Usuario.findOne({ email });
+        const { password, email, dni, ...campos } = req.body;
+       //VALIDACION CORREO NO PUEDE SER IGUAL A UNO DE LA BD 
+        if ( clienteDB.email !== email ) {
+            const existeEmail = await Cliente.findOne({ email });
             if ( existeEmail ) {
                 return res.status(400).json({
                     ok: false,
-                    msg: 'Ya existe un usuario con ese email'
+                    msg: 'Ya existe un cliente con ese email'
                 });
             }
         }
-
         //VALIDACION DNI NO PUEDE SER IGUAL A UNO DE LA BD 
-        if ( usuarioDB.dni !== dni ) {
-            const existeDni = await Usuario.findOne({ dni });
+        if ( clienteDB.dni !== dni ) {
+            const existeDni = await Cliente.findOne({ dni });
             if ( existeDni ) {
                 return res.status(400).json({
                     ok: false,
-                    msg: 'Ya existe un usuario con ese dni'
+                    msg: 'Ya existe un cliente con ese dni'
                 });
             }
         }
-
+        
         campos.password = password ? bcrypt.hashSync(password, bcrypt.genSaltSync()) : campos.password;
-        campos.dni = dni;
         campos.email = email;
+        campos.dni = dni;
 
-        const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, { new: true } );
+        const clienteActualizado = await Cliente.findByIdAndUpdate( uid, campos, { new: true } );
 
         res.json({
             ok: true,
-            usuario: usuarioActualizado
+            usuario: clienteActualizado
         });
 
         
@@ -145,27 +141,27 @@ const actualizarUsuario = async (req, res = response) => {
 
 }
 
-const borrarUsuario = async(req, res = response ) => {
+const borrarCliente = async(req, res = response ) => {
 
     const uid = req.params.id;
 
     try {
 
-        const usuarioDB = await Usuario.findById( uid );
+        const clienteDB = await Cliente.findById( uid );
 
-        if ( !usuarioDB ) {
+        if ( !clienteDB ) {
             return res.status(404).json({
                 ok: false,
-                msg: 'No existe un usuario por ese id'
+                msg: 'No existe un cliente por ese id'
             });
         }
 
-        await Usuario.findByIdAndDelete( uid );
+        await Cliente.findByIdAndDelete( uid );
 
         
         res.json({
             ok: true,
-            msg: 'Usuario eliminado'
+            msg: 'Cliente eliminado'
         });
 
     } catch (error) {
@@ -182,8 +178,8 @@ const borrarUsuario = async(req, res = response ) => {
 }
 
 module.exports = {
-    getUsuarios,
-    crearUsuario,
-    actualizarUsuario,
-    borrarUsuario
+    getClientes,
+    crearCliente,
+    actualizarCliente,
+    borrarCliente
 }
