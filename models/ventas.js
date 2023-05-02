@@ -1,60 +1,50 @@
 const { Schema, model } = require('mongoose');
 
-const ventasSchema = Schema({
+const VentasSchema = Schema({
 
-    documento: {
-        type: String,
-        required: true,
-        enum:['Factura','Boleta','Guia de Salida']
-        },
-    cliente: {
-        type: Schema.Types.ObjectId,
-        ref: 'Cliente',
-        required: true
-        },
-    nombre:{
-        type: Schema.Types.ObjectId,
-        ref: 'Producto',
-        required: true
-        },
-     subtotal:{
-        type: Number,
-        required:true
-     },
-     igv:{
-        type: Number,
-        required:true
-     },
-     total:{
-        type: Number,
-        required:true
-     },
-     moneda:{
-        type: String,
-        enum:['Soles','Dólares'],
-        required:true
-     },
-     estado: {
-        type: String,
-        required: true,
-        enum: ["1","0"],
-        default:"1"
+    serie_venta: {
+        type: String
     },
-    fecha: {
-        type: Date.now(),
+    correlat_venta: {
+        type: String
+    },
+    cliente_venta: {
+        type: String
+    },
+    dni_venta: {
+        type: String
+    },
+    fecha_venta:{
+        type: Date,
+        required:true,
+    },
+    subtot_venta:{
+        type:Number,
+        required:true
+    },
+    igv_venta:{
+        type:Number,
+        required:true
+    },
+    tot_venta:{
+        type:Number,
+        required:true
+    },
+    estado: {
+        type: Boolean,
         required: true,
-    },           
-},
-{
-    collection:ventas
-});
+        default:true
+    },
+    detalle_venta:{
+        type: Array,
+        items:[Schema.Types.ObjectId],
+        ref: 'Detalle_Producto'
+}
+}, {  collection: 'Ventas' });
 
-
-ventasSchema.method('toJSON', function() {
+VentasSchema.method('toJSON', function() {
     const { __v, ...object } = this.toObject();
     return object;
 })
 
-
-
-module.exports = model( 'Ventas', ventasSchema );
+module.exports = model( 'Ventas', VentasSchema );

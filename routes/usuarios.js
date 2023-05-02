@@ -16,15 +16,8 @@ router.get( '/', validarJWT , getUsuarios );
 
 router.post( '/',
     [
-        check('nombre', 'El nombre es obligatorio').not().isEmpty(),
-        check('apellido', 'El apellido es obligatorio').not().isEmpty(),
-        check('genero', 'El genero es obligatorio').not().isEmpty(),
-        check('dni', 'El dni es obligatorio').not().isEmpty(),
-        check('especialidad', 'El id de especialidad no es válido').not().isEmpty(),
-        check('nacimiento', 'El cumpleaños es obligatorio').not().isEmpty(),
-        check('celular', 'El celular es obligatorio').not().isEmpty(),
-        check('email', 'El email es obligatorio').isEmail(),
-        check('password', 'El password es requerido y debe tener 8 caracteres como mínimo').isLength({ min: 8 }).not().isEmpty(),    
+        check('nom_usuario', 'El nombre es obligatorio').not().isEmpty(),
+        check('password', 'El password es obligatorio y debe tener 8 caracteres como mínimo').isLength({ min: 8 }).not().isEmpty(),      
         validarCampos,
     ], 
     crearUsuario 
@@ -33,8 +26,8 @@ router.post( '/',
 router.put( '/:id',
     [
         validarJWT,
-        check('nombre', 'El nombre es obligatorio').not().isEmpty(),
-        check('email', 'El email es obligatorio').isEmail(),
+        check('nom_usuario', 'El nombre es obligatorio').not().isEmpty(),
+        check('password', 'El dni es obligatorio').isLength({ min: 8 }).not().isEmpty(), 
         validarCampos,
     ],
     actualizarUsuario

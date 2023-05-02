@@ -8,8 +8,8 @@ const getUsuarios = async(req, res) => {
 
     const desde = Number(req.query.desde) || 0;
 
-    const [ usuarios, total ] = await Promise.all([Usuario.find({}, 'nombre apellido genero dni nacimiento celular email esmedico img')
-            .populate('especialidad','nombre')
+    const [ usuarios, total ] = await Promise.all([Usuario.find({},'nom_usuario')
+            //.populate('especialidad','nombre')
             .skip( desde ),
 
         Usuario.countDocuments()
@@ -26,25 +26,16 @@ const getUsuarios = async(req, res) => {
 
 const crearUsuario = async(req, res = response) => {
 
-    const { email, password, dni } = req.body;
+    const { nom_usuario, password } = req.body;
 
     try {
 
-        const existeEmail = await Usuario.findOne({ email });
+        const existeusuario = await Usuario.findOne({ nom_usuario });
 
-        if ( existeEmail ) {
+        if ( existeusuario ) {
             return res.status(400).json({
                 ok: false,
-                msg: 'El correo ya está registrado'
-            });
-        }
-
-        const existedni = await Usuario.findOne({ dni });
-
-        if ( existedni ) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'El dni ya está registrado'
+                msg: 'El usuario ya está registrado'
             });
         }
 
@@ -86,7 +77,6 @@ const actualizarUsuario = async (req, res = response) => {
 
     const uid = req.params.id;
 
-
     try {
 
         const usuarioDB = await Usuario.findById( uid );
@@ -97,36 +87,22 @@ const actualizarUsuario = async (req, res = response) => {
             });
         }
         // Actualizaciones
-        const { password, dni, email, ...campos } = req.body;
+        const { password, nom_usuario, ...campos } = req.body;
 
-        //VALIDACION EMAIL NO PUEDE SER IGUAL A UNO DE LA BD 
-        if ( usuarioDB.email !== email ) {
-            const existeEmail = await Usuario.findOne({ email });
-            if ( existeEmail ) {
+        //VALIDACION USUARIO NO PUEDE SER IGUAL A UNO DE LA BD 
+        if ( usuarioDB.nom_usuario !== nom_usuario ) {
+            const existeusuario = await Usuario.findOne({ nom_usuario });
+            if ( existeusuario ) {
                 return res.status(400).json({
                     ok: false,
-                    msg: 'Ya existe un usuario con ese email'
-                });
-            }
-        }
-
-        //VALIDACION DNI NO PUEDE SER IGUAL A UNO DE LA BD 
-        if ( usuarioDB.dni !== dni ) {
-            const existeDni = await Usuario.findOne({ dni });
-            if ( existeDni ) {
-                return res.status(400).json({
-                    ok: false,
-                    msg: 'Ya existe un usuario con ese dni'
+                    msg: 'Ya existe un usuario con ese nombre'
                 });
             }
         }
 
         campos.password = password ? bcrypt.hashSync(password, bcrypt.genSaltSync()) : campos.password;
-        campos.dni = dni;
-        campos.email = email;
 
-        const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, { new: true } )
-                                                .populate('especialidad','nombre');
+        const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, { new: true } );
 
         res.json({
             ok: true,

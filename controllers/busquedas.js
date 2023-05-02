@@ -1,22 +1,19 @@
 const { response } = require('express');
 
 const Usuario = require('../models/usuario');
-const Cliente = require('../models/clientes');
 
 
 const getTodo = async(req, res = response ) => {
 
     const busqueda = req.params.busqueda;
 
-    const [ usuarios, clientes ] = await Promise.all([
-        Usuario.find({ dni: busqueda },'nombre'),
-        Cliente.find({ dni: busqueda },'nombre'),
+    const [ usuarios ] = await Promise.all([
+        Usuario.find({ dni: busqueda },'nombre')
     ]);
 
     res.json({
         ok: true,
-        usuarios,
-        clientes
+        usuarios
     })
 
 }

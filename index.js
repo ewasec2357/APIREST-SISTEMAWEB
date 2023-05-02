@@ -19,17 +19,12 @@ dbConnection();
 
 
 // Rutas
-app.use( '/api/clientes', require('./routes/clientes') );
-app.use( '/api/usuarios', require('./routes/usuarios') );
-app.use( '/api/especialidad', require('./routes/especialidad') );
-app.use( '/api/citas', require('./routes/citas') );
-app.use( '/api/canjes', require('./routes/canjes') );
-app.use( '/api/ventas', require('./routes/ventas') );
-app.use( '/api/productos', require('./routes/productos') );
-app.use( '/api/todo', require('./routes/busquedas') );
-app.use( '/api/login', require('./routes/auth') );
-app.use( '/api/upload', require('./routes/uploads') );
-
+app.use( '/api/usuarios',   require('./routes/usuarios') );
+app.use( '/api/todo',       require('./routes/busquedas') );
+app.use( '/api/login',      require('./routes/auth') );
+app.use( '/api/upload',     require('./routes/uploads') );
+app.use( '/api/categorias', require('./routes/categorias'));
+app.use( '/api/productos',  require('./routes/productos'));
 
 
 app.listen( process.env.PORT, () => {

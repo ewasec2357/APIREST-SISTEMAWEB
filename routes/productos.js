@@ -1,53 +1,42 @@
 /*
-    Canjes
-    ruta: '/api/Canjes'
+    Ruta: /api/productos
 */
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 
+const { getProductos, crearProducto, actualizarProducto, borrarProducto } = require('../controllers/productos');
 const { validarJWT } = require('../middlewares/validar-jwt');
-
-const {
-    getProductos,
-    crearProductos,
-    actualizarProductos,
-    borrarProductos
-} = require('../controllers/productos')
 
 
 const router = Router();
 
-router.get( '/', validarJWT, getProductos );
+
+router.get( '/', validarJWT , getProductos );
 
 router.post( '/',
-    [
-        check('nombre', 'El nombre es obligatorio').not().isEmpty(),
-        check('serie', 'El número de serie es obligatoria').not().isEmpty(),
-        check('precio','El precio es obligatorio').not().isEmpty(),
-        check('descripcion', 'La descripcion es obligatoria').not().isEmpty(),
-        check('fechacreacion', 'La fecha de creación es obligatoria').not().isEmpty(),
-        validarCampos,
+    [   
         validarJWT,
+        check('nom_prod', 'El nombre de la categoria es obligatorio').not().isEmpty(),
+        check('id_cat', 'El nombre de la categoria es obligatorio').not().isEmpty(),
+    
+        validarCampos,
     ], 
-    crearProductos 
+    crearProducto 
 );
 
 router.put( '/:id',
     [
-        check('nombre', 'El nombre es obligatorio').not().isEmpty(),
-        check('serie', 'El número de serie es obligatoria').not().isEmpty(),
-        validarCampos,
         validarJWT,
+        check('nom_prod', 'El nombre de la categoria es obligatorio').not().isEmpty(),
+        validarCampos,
     ],
-    actualizarProductos
+    actualizarProducto
 );
 
 router.delete( '/:id',
-    [
-        validarJWT,
-    ],
-    borrarProductos
+    validarJWT,
+    borrarProducto
 );
 
 

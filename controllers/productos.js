@@ -1,52 +1,47 @@
 const { response } = require('express');
 const Productos = require('../models/productos');
 
-
-const getProductos = async(req, res = response) => {
+const getProductos = async(req, res) => {
 
     const desde = Number(req.query.desde) || 0;
 
-    const [ productos, total ] = await Promise.all([
-        Productos
-            .find({}, 'nombre serie precio descripcion estado fechacreacion')
-            .skip( desde ),
-            Productos.countDocuments()
+    const [ productos, total ] = await Promise.all([Productos.find({}, 
+                'nom_prod  prec_prod stock_prod img_prod')
+                .populate('Categorias','nom_cat')
+                .skip( desde ),
+       Productos.countDocuments()
     ]);
+
 
     res.json({
         ok: true,
         productos,
         total
     });
+
 }
 
-const crearProductos = async(req, res = response) => {
+const crearProducto = async(req, res) => {
+
+    const { nom_prod } = req.body;
+    const productos = new Productos( req.body) 
 
     try {
-
-        const existenombre = await Productos.findOne({ nombre });
-        if ( existenombre ) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'El nombre del producto ya está registrado'
+        const existeproducto = await Productos.findOne({ nom_prod });
+        if ( existeproducto ) {
+           return res.status(400).json({
+               ok: false,
+               msg: 'Ya existe ese producto'
             });
         }
 
-        const existeserie = await Productos.findOne({ serie });
-        if ( existeserie ) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'La serie del producto ya está registrado'
-            });
-        }
 
-    const productos = new Productos( req.body );
-    await productos.save();
-
-    res.json({
-        ok: true,
-        productos
-    });
+        const productosDB = await productos.save()
+        res.json({
+            ok: true,
+            productosDB
+        }) 
+        ;
 
     } catch (error) {
         console.log(error)
@@ -55,96 +50,81 @@ const crearProductos = async(req, res = response) => {
             msg: 'Hable con el administrador'
         })
     }
+
+
 }
 
-const actualizarProductos = async (req, res = response) => {
+const actualizarProducto = async (req, res = response) => {
     
-    const uid = req.params.id;
-
+    const id  = req.params.id;
+    
     try {
-        const productosDB = await Productos.findById( uid );
+        const productosDB = await Productos.findById( id );
+
         if ( !productosDB ) {
             return res.status(404).json({
-                ok: false,
-                msg: 'No existe el producto por ese id'
+                ok: true,
+                msg: 'Producto no encontrado por id',
             });
         }
-        // Actualizaciones
-        
-        const { nombre, serie, ...campos } = req.body;
-        if ( productosDB.nombre !== nombre ) {
-            const existeproducto = await Productos.findOne({ nombre });
-            if ( existeproducto ) {
-                return res.status(400).json({
-                    ok: false,
-                    msg: 'Ya existe un producto con ese nombre'
-                });
-            }
-        }
-        if ( productosDB.serie !== serie ) {
-            const existeserie = await Productos.findOne({ serie });
-            if ( existeserie ) {
-                return res.status(400).json({
-                    ok: false,
-                    msg: 'Ya existe un producto con ese número de serie'
-                });
-            }
-        }
-        campos.nombre = nombre;
-        const productoActualizado = await Productos.findByIdAndUpdate( uid, campos, { new: true } );
+
+        const cambiosproductos = { ...req.body,productos: id }
+
+        const productoActualizado = await Productos.findByIdAndUpdate( id, cambiosproductos, { new: true } )
 
         res.json({
             ok: true,
-            producto: productoActualizado
-        });
+            productos: productoActualizado
+        })
 
-        
     } catch (error) {
+
         console.log(error);
+
         res.status(500).json({
             ok: false,
-            msg: 'Error inesperado'
+            msg: 'Hable con el administrador'
         })
     }
 }
 
-const borrarProductos = async (req, res = response) => {
+const borrarProducto = async (req, res = response) => {
 
-    const uid = req.params.id;
+    const id  = req.params.id;
 
     try {
+        
+        const productos = await Productos.findById( id );
 
-        const productosDB = await Productos.findById( uid );
-
-        if ( !productosDB ) {
+        if ( !productos ) {
             return res.status(404).json({
-                ok: false,
-                msg: 'No existe un producto por ese id'
+                ok: true,
+                msg: 'El producto no fue encontrado por id',
             });
         }
 
-        await Productos.findByIdAndDelete( uid );
+        await Productos.findByIdAndDelete( id );
 
-        
         res.json({
             ok: true,
-            msg: 'Producto eliminado'
-        });
+            msg: 'Producto borrado'
+        }); 
 
     } catch (error) {
-        
+
         console.log(error);
+
         res.status(500).json({
             ok: false,
             msg: 'Hable con el administrador'
-        });
-
+        })
     }
 }
 
+
 module.exports = {
     getProductos,
-    crearProductos,
-    actualizarProductos,
-    borrarProductos
+    crearProducto,
+    actualizarProducto,
+    borrarProducto
 }
